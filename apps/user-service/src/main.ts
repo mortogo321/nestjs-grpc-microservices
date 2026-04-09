@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { Logger } from '@nestjs/common';
 import { UserModule } from './user.module';
 
 async function bootstrap() {
@@ -18,7 +17,7 @@ async function bootstrap() {
   );
 
   await app.listen();
-  Logger.log('User Service is listening on gRPC port 5001', 'Bootstrap');
+  console.log('User Service is listening on port 5001 (gRPC)');
 }
 
 bootstrap();

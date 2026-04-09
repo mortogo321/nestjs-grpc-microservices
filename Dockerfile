@@ -1,33 +1,29 @@
-# --- Builder stage ---
-FROM node:22-alpine AS builder
-
-ARG APP_NAME
+# ---- Builder stage ----
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-RUN npm ci --ignore-scripts
+RUN npm install
 
-COPY tsconfig.json nest-cli.json ./
-COPY proto/ ./proto/
-COPY apps/ ./apps/
+COPY . .
 
+ARG APP_NAME
 RUN npx nest build ${APP_NAME}
 
-# --- Production stage ---
-FROM node:22-alpine AS production
-
-ARG APP_NAME
-ENV APP_NAME=${APP_NAME}
+# ---- Production stage ----
+FROM node:20-alpine AS production
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
 COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+RUN npm install --omit=dev
 
 COPY proto/ ./proto/
-COPY --from=builder /app/dist ./dist
 
-USER node
+ARG APP_NAME
+COPY --from=builder /app/dist/apps/${APP_NAME} ./dist/apps/${APP_NAME}
 
-CMD node dist/apps/${APP_NAME}/main.js
+CMD ["sh", "-c", "node dist/apps/${APP_NAME}/main.js"]

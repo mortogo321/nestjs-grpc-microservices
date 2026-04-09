@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { Logger } from '@nestjs/common';
 import { OrderModule } from './order.module';
 
 async function bootstrap() {
@@ -18,7 +17,7 @@ async function bootstrap() {
   );
 
   await app.listen();
-  Logger.log('Order Service is listening on gRPC port 5002', 'Bootstrap');
+  console.log('Order Service is listening on port 5002 (gRPC)');
 }
 
 bootstrap();

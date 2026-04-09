@@ -4,72 +4,53 @@ import {
   Post,
   Body,
   Param,
-  OnModuleInit,
   Inject,
-  HttpException,
-  HttpStatus,
+  OnModuleInit,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable, firstValueFrom } from 'rxjs';
 
-interface Order {
-  id: string;
-  userId: string;
-  product: string;
-  quantity: number;
-  price: number;
-  total: number;
-  status: string;
-  createdAt: string;
-}
-
-interface OrderList {
-  orders: Order[];
-}
-
-interface CreateOrderDto {
-  userId: string;
-  product: string;
-  quantity: number;
-  price: number;
-}
-
-interface OrderServiceGrpc {
-  getOrder(data: { id: string }): Observable<Order>;
-  getOrders(data: Record<string, never>): Observable<OrderList>;
-  createOrder(data: CreateOrderDto): Observable<Order>;
+interface OrderService {
+  getOrder(data: { id: string }): Observable<any>;
+  getOrders(data: Record<string, never>): Observable<any>;
+  createOrder(data: {
+    userId: string;
+    product: string;
+    quantity: number;
+    price: number;
+  }): Observable<any>;
 }
 
 @Controller('orders')
 export class OrderController implements OnModuleInit {
-  private orderService: OrderServiceGrpc;
+  private orderService: OrderService;
 
   constructor(@Inject('ORDER_PACKAGE') private readonly client: ClientGrpc) {}
 
   onModuleInit() {
-    this.orderService =
-      this.client.getService<OrderServiceGrpc>('OrderService');
+    this.orderService = this.client.getService<OrderService>('OrderService');
   }
 
   @Get()
-  async getOrders(): Promise<OrderList> {
+  async getOrders() {
     return firstValueFrom(this.orderService.getOrders({}));
   }
 
   @Get(':id')
-  async getOrder(@Param('id') id: string): Promise<Order> {
-    try {
-      return await firstValueFrom(this.orderService.getOrder({ id }));
-    } catch (error) {
-      throw new HttpException(
-        `Order with id ${id} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+  async getOrder(@Param('id') id: string) {
+    return firstValueFrom(this.orderService.getOrder({ id }));
   }
 
   @Post()
-  async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
-    return firstValueFrom(this.orderService.createOrder(createOrderDto));
+  async createOrder(
+    @Body()
+    body: {
+      userId: string;
+      product: string;
+      quantity: number;
+      price: number;
+    },
+  ) {
+    return firstValueFrom(this.orderService.createOrder(body));
   }
 }

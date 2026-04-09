@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod, RpcException } from '@nestjs/microservices';
-import { status as GrpcStatus } from '@grpc/grpc-js';
+import { GrpcMethod } from '@nestjs/microservices';
+import { randomUUID } from 'crypto';
 
 interface Order {
   id: string;
@@ -8,20 +8,8 @@ interface Order {
   product: string;
   quantity: number;
   price: number;
-  total: number;
   status: string;
   createdAt: string;
-}
-
-interface GetOrderRequest {
-  id: string;
-}
-
-interface CreateOrderRequest {
-  userId: string;
-  product: string;
-  quantity: number;
-  price: number;
 }
 
 @Controller()
@@ -33,22 +21,25 @@ export class OrderController {
       product: 'Mechanical Keyboard',
       quantity: 1,
       price: 149.99,
-      total: 149.99,
-      status: 'CONFIRMED',
+      status: 'COMPLETED',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: '2',
+      userId: '2',
+      product: 'USB-C Hub',
+      quantity: 2,
+      price: 39.99,
+      status: 'PENDING',
       createdAt: new Date().toISOString(),
     },
   ];
 
-  private nextId = 2;
-
   @GrpcMethod('OrderService', 'GetOrder')
-  getOrder(data: GetOrderRequest): Order {
+  getOrder(data: { id: string }): Order {
     const order = this.orders.find((o) => o.id === data.id);
     if (!order) {
-      throw new RpcException({
-        code: GrpcStatus.NOT_FOUND,
-        message: `Order with id ${data.id} not found`,
-      });
+      throw new Error(`Order with id ${data.id} not found`);
     }
     return order;
   }
@@ -59,14 +50,18 @@ export class OrderController {
   }
 
   @GrpcMethod('OrderService', 'CreateOrder')
-  createOrder(data: CreateOrderRequest): Order {
+  createOrder(data: {
+    userId: string;
+    product: string;
+    quantity: number;
+    price: number;
+  }): Order {
     const order: Order = {
-      id: String(this.nextId++),
+      id: randomUUID(),
       userId: data.userId,
       product: data.product,
       quantity: data.quantity,
       price: data.price,
-      total: data.quantity * data.price,
       status: 'PENDING',
       createdAt: new Date().toISOString(),
     };

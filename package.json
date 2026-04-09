@@ -1,37 +1,34 @@
 {
   "name": "nestjs-grpc-microservices",
   "version": "1.0.0",
-  "description": "NestJS gRPC Microservices POC with API Gateway, User Service, and Order Service",
+  "description": "NestJS gRPC microservices POC with API gateway, user service, and order service",
   "private": true,
   "scripts": {
-    "build": "nest build",
+    "build": "nest build api-gateway && nest build user-service && nest build order-service",
     "build:api-gateway": "nest build api-gateway",
     "build:user-service": "nest build user-service",
     "build:order-service": "nest build order-service",
-    "start:api-gateway": "nest start api-gateway --watch",
-    "start:user-service": "nest start user-service --watch",
-    "start:order-service": "nest start order-service --watch",
-    "start:api-gateway:prod": "node dist/apps/api-gateway/main.js",
-    "start:user-service:prod": "node dist/apps/user-service/main.js",
-    "start:order-service:prod": "node dist/apps/order-service/main.js"
+    "start:api-gateway": "nest start api-gateway",
+    "start:user-service": "nest start user-service",
+    "start:order-service": "nest start order-service",
+    "start:api-gateway:dev": "nest start api-gateway --watch",
+    "start:user-service:dev": "nest start user-service --watch",
+    "start:order-service:dev": "nest start order-service --watch"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.10.0",
     "@grpc/proto-loader": "^0.7.12",
-    "@nestjs/common": "^11.0.0",
-    "@nestjs/core": "^11.0.0",
-    "@nestjs/microservices": "^11.0.0",
-    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/common": "^10.4.0",
+    "@nestjs/core": "^10.4.0",
+    "@nestjs/microservices": "^10.4.0",
+    "@nestjs/platform-express": "^10.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@nestjs/cli": "^11.0.0",
-    "@nestjs/schematics": "^11.0.0",
-    "@types/node": "^22.0.0",
-    "typescript": "^5.7.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "@nestjs/cli": "^10.4.0",
+    "@nestjs/schematics": "^10.1.0",
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
   }
 }

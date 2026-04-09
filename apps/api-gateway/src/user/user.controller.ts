@@ -4,66 +4,40 @@ import {
   Post,
   Body,
   Param,
-  OnModuleInit,
   Inject,
-  HttpException,
-  HttpStatus,
+  OnModuleInit,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable, firstValueFrom } from 'rxjs';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
-
-interface UserList {
-  users: User[];
-}
-
-interface CreateUserDto {
-  name: string;
-  email: string;
-}
-
-interface UserServiceGrpc {
-  getUser(data: { id: string }): Observable<User>;
-  getUsers(data: Record<string, never>): Observable<UserList>;
-  createUser(data: CreateUserDto): Observable<User>;
+interface UserService {
+  getUser(data: { id: string }): Observable<any>;
+  getUsers(data: Record<string, never>): Observable<any>;
+  createUser(data: { name: string; email: string }): Observable<any>;
 }
 
 @Controller('users')
 export class UserController implements OnModuleInit {
-  private userService: UserServiceGrpc;
+  private userService: UserService;
 
   constructor(@Inject('USER_PACKAGE') private readonly client: ClientGrpc) {}
 
   onModuleInit() {
-    this.userService =
-      this.client.getService<UserServiceGrpc>('UserService');
+    this.userService = this.client.getService<UserService>('UserService');
   }
 
   @Get()
-  async getUsers(): Promise<UserList> {
+  async getUsers() {
     return firstValueFrom(this.userService.getUsers({}));
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<User> {
-    try {
-      return await firstValueFrom(this.userService.getUser({ id }));
-    } catch (error) {
-      throw new HttpException(
-        `User with id ${id} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+  async getUser(@Param('id') id: string) {
+    return firstValueFrom(this.userService.getUser({ id }));
   }
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return firstValueFrom(this.userService.createUser(createUserDto));
+  async createUser(@Body() body: { name: string; email: string }) {
+    return firstValueFrom(this.userService.createUser(body));
   }
 }

@@ -1,38 +1,6 @@
+version: '3.8'
+
 services:
-  user-service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        APP_NAME: user-service
-    ports:
-      - '5001:5001'
-    environment:
-      - NODE_ENV=production
-    restart: unless-stopped
-    healthcheck:
-      test: ['CMD', 'node', '-e', "require('net').createConnection({port:5001}).on('error',()=>process.exit(1)).on('connect',()=>process.exit(0))"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  order-service:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        APP_NAME: order-service
-    ports:
-      - '5002:5002'
-    environment:
-      - NODE_ENV=production
-    restart: unless-stopped
-    healthcheck:
-      test: ['CMD', 'node', '-e', "require('net').createConnection({port:5002}).on('error',()=>process.exit(1)).on('connect',()=>process.exit(0))"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
   api-gateway:
     build:
       context: .
@@ -42,13 +10,37 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - NODE_ENV=production
+      - PORT=3000
       - USER_SERVICE_URL=user-service:5001
       - ORDER_SERVICE_URL=order-service:5002
-      - PORT=3000
     depends_on:
-      user-service:
-        condition: service_healthy
-      order-service:
-        condition: service_healthy
-    restart: unless-stopped
+      - user-service
+      - order-service
+    networks:
+      - grpc-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: user-service
+    ports:
+      - '5001:5001'
+    networks:
+      - grpc-network
+
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: order-service
+    ports:
+      - '5002:5002'
+    networks:
+      - grpc-network
+
+networks:
+  grpc-network:
+    driver: bridge

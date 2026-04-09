@@ -12,13 +12,15 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "strictBindCallApply": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "paths": {}
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@shared/*": ["libs/shared/src/*"]
+    }
   },
-  "include": ["apps/**/*.ts"],
+  "include": ["apps/**/*.ts", "libs/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

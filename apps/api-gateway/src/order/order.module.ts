@@ -12,7 +12,7 @@ import { OrderController } from './order.controller';
         options: {
           package: 'order',
           protoPath: join(process.cwd(), 'proto/order.proto'),
-          url: process.env.ORDER_SERVICE_URL || 'localhost:5002',
+          url: process.env.ORDER_SERVICE_URL || 'order-service:5002',
         },
       },
     ]),
