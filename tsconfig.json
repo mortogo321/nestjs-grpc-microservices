@@ -21,6 +21,6 @@
       "@shared/*": ["libs/shared/src/*"]
     }
   },
-  "include": ["apps/**/*.ts", "libs/**/*.ts"],
+  "include": ["apps/**/*.ts", "libs/**/*.ts", "src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

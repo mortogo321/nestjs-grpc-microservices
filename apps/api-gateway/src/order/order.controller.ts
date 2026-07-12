@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Inject,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Inject, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable, firstValueFrom } from 'rxjs';
 
@@ -23,7 +15,7 @@ interface OrderService {
 
 @Controller('orders')
 export class OrderController implements OnModuleInit {
-  private orderService: OrderService;
+  private orderService!: OrderService;
 
   constructor(@Inject('ORDER_PACKAGE') private readonly client: ClientGrpc) {}
 
