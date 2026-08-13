@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Observable, throwError, TimeoutError } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';

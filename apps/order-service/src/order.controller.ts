@@ -50,12 +50,7 @@ export class OrderController {
   }
 
   @GrpcMethod('OrderService', 'CreateOrder')
-  createOrder(data: {
-    userId: string;
-    product: string;
-    quantity: number;
-    price: number;
-  }): Order {
+  createOrder(data: { userId: string; product: string; quantity: number; price: number }): Order {
     const order: Order = {
       id: randomUUID(),
       userId: data.userId,
