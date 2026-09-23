@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "NestJS gRPC microservices POC with API gateway, user service, and order service",
   "private": true,
+  "packageManager": "bun@1.4.2",
+  "engines": {
+    "bun": ">=1.4.0"
+  },
   "scripts": {
     "build": "nest build api-gateway && nest build user-service && nest build order-service",
     "build:api-gateway": "nest build api-gateway",
@@ -14,7 +18,8 @@
     "start:api-gateway:dev": "nest start api-gateway --watch",
     "start:user-service:dev": "nest start user-service --watch",
     "start:order-service:dev": "nest start order-service --watch",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"

@@ -44,13 +44,13 @@ For internal service-to-service calls where human readability is not required, g
 ## Prerequisites
 
 - Docker and Docker Compose
-- (Optional) Node.js 20+ and npm for local development
+- (Optional) Bun 1.4+ for local development
 
 ## Quick start
 
 ```bash
 # Build and start all services
-docker-compose up --build
+docker compose up --build
 
 # In another terminal, test the endpoints
 curl http://localhost:3000/users
@@ -72,15 +72,15 @@ curl http://localhost:3000/orders
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Build all services
-npm run build
+bun run build
 
 # Start each service in separate terminals
-npm run start:user-service
-npm run start:order-service
-npm run start:api-gateway
+bun run start:user-service
+bun run start:order-service
+bun run start:api-gateway
 ```
 
 When running locally, update the gRPC client URLs in the gateway modules to point to `localhost` instead of the Docker service names.
