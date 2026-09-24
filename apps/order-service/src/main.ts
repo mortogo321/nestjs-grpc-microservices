@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { OrderModule } from './order.module';
+import { GrpcExceptionFilter } from '../../../src/common/filters/grpc-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(OrderModule, {
@@ -12,6 +13,8 @@ async function bootstrap() {
       url: '0.0.0.0:5002',
     },
   });
+
+  app.useGlobalFilters(new GrpcExceptionFilter());
 
   await app.listen();
   console.log('Order Service is listening on port 5002 (gRPC)');

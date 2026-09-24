@@ -46,6 +46,7 @@ RUN bun install --frozen-lockfile --production
 
 COPY proto/ ./proto/
 COPY --from=builder /app/dist/apps/${APP_NAME} ./dist/apps/${APP_NAME}
+COPY --from=builder /app/dist/src ./dist/src
 
 # Run as a non-root user
 RUN addgroup -g 1001 -S nodejs && \

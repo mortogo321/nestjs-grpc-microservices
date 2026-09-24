@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Inject, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable, firstValueFrom } from 'rxjs';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 interface OrderService {
   getOrder(data: { id: string }): Observable<any>;
@@ -34,15 +35,7 @@ export class OrderController implements OnModuleInit {
   }
 
   @Post()
-  async createOrder(
-    @Body()
-    body: {
-      userId: string;
-      product: string;
-      quantity: number;
-      price: number;
-    },
-  ) {
+  async createOrder(@Body() body: CreateOrderDto) {
     return firstValueFrom(this.orderService.createOrder(body));
   }
 }

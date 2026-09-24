@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { randomUUID } from 'crypto';
 
@@ -39,7 +39,7 @@ export class OrderController {
   getOrder(data: { id: string }): Order {
     const order = this.orders.find((o) => o.id === data.id);
     if (!order) {
-      throw new Error(`Order with id ${data.id} not found`);
+      throw new NotFoundException(`Order with id ${data.id} not found`);
     }
     return order;
   }

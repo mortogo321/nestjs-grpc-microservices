@@ -68,6 +68,11 @@ curl http://localhost:3000/orders
 | `GET` | `/orders/:id` | Get an order by ID |
 | `POST` | `/orders` | Create an order (`{ "userId": "...", "product": "...", "quantity": 1, "price": 29.99 }`) |
 
+Request bodies are validated by a global `ValidationPipe` (whitelist mode) against
+`class-validator` DTOs — invalid payloads get a `400` before any gRPC call is made.
+Both gRPC services translate failures to proper gRPC status codes via a shared
+global `GrpcExceptionFilter` (e.g. unknown IDs surface as `NOT_FOUND`, not `UNKNOWN`).
+
 ## Local development (without Docker)
 
 ```bash

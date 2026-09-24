@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { randomUUID } from 'crypto';
 
@@ -30,7 +30,7 @@ export class UserController {
   getUser(data: { id: string }): User {
     const user = this.users.find((u) => u.id === data.id);
     if (!user) {
-      throw new Error(`User with id ${data.id} not found`);
+      throw new NotFoundException(`User with id ${data.id} not found`);
     }
     return user;
   }

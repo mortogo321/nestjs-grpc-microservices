@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Inject, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable, firstValueFrom } from 'rxjs';
+import { CreateUserDto } from './dto/create-user.dto';
 
 interface UserService {
   getUser(data: { id: string }): Observable<any>;
@@ -29,7 +30,7 @@ export class UserController implements OnModuleInit {
   }
 
   @Post()
-  async createUser(@Body() body: { name: string; email: string }) {
+  async createUser(@Body() body: CreateUserDto) {
     return firstValueFrom(this.userService.createUser(body));
   }
 }
